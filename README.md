@@ -13,6 +13,7 @@ analysis? But I’m not launching any probes to orbit distant planets any time
 this life</q>, then good! That means the following code won’t offend your
 sense of mathematical elegance (too much). So here, have a mashup of some
 mundane programming we all do on a day‐to‐day basis…
+
 ```C++
 #include <dimensional/dimensional.hpp>
 #include <dimensional/si.hpp>
@@ -59,6 +60,7 @@ auto ad_hoc()
 	return imperial_blots/fallacy;
 }
 ```
+
 Now that the reader is sufficiently overwhelmed by the outrageous expressive
 power, I’ll go through this nonsense at a slower pace, describing line‐by‐line
 what the heck is happening. If you feel confident in your understanding of most
@@ -473,6 +475,7 @@ More (concise) examples
 -----------------------
 
 ### How about some colorimetry?
+
 ```C++
 #include <dimensional/dimensional.hpp>
 using dimensional::dimension;
@@ -496,6 +499,7 @@ template<typename T> using  RGB = rgb<T, struct linear_srgb_csp_tag>;
 using color        = sRGB<uint_least10_t>;
 using linear_color =  RGB<float>;
 ```
+
 So far so clear(?). Now we’d like to desaturate that.
 
 <pre>template&lt;typename T, typename ColorSpace&gt;
@@ -572,6 +576,7 @@ should be treated as such by being honoured with a separate type.
 
 
 ### Bulk data
+
 ```C++
 using color = sRGB<std::uint8_t>;
 static_assert( sizeof(color) == sizeof(std::uint8_t)*3, "" );
@@ -585,6 +590,7 @@ static_assert( area.unit == square(px), "" );
 std::vector<color> canvas{ area.count() };
 assert( canvas.size() == 8'739'900 );
 ```
+
 That’s 26 219 700 quantity objects, one byte each.
 
 Instead of `area.count()` with the accompanying assertion on the unit, we could
@@ -594,6 +600,7 @@ yields questionable benefits in terms of readability _and_ maintainability.
 
 
 ### Foreign type interoperability
+
 ```C++
 using si::unit::m;
 using si::s;
@@ -619,6 +626,7 @@ int main()
 	assert( 400'000*USD/12s == 33'333*(USD/s) );
 }
 ```
+
 Note: The last line currently won’t compile without explicitly converting `12s`
 to `decltype(0ll*si::s)` (which, admittedly, would utterly devastate the purpose
 of using a chrono literal in this example). The solution to that is _not_ pretty
@@ -641,6 +649,7 @@ customizability, would require conversion‐to‐concept operators. Is that a th
 
 
 ### Examples of complete type stacks
+
 ```C++
 #include <boost/multiprecision/cpp_int.hpp>
 #include <dimensional/dimensional.hpp>
@@ -683,6 +692,7 @@ static_assert(     std::is_same< tempr_diff, deg_C_qty >{}, "" );
 using tempr_C = mjk::point< deg_C_qty, struct celsius_scale_tag >;
 using tempr_F = mjk::point< deg_F_qty, struct fahrenheit_scale_tag >;
 ```
+
 Names could be better, and `mjk::​point` is yet to be finished and released, but
 you get the idea. If not, then, in short, this example touches upon the notion
 of _spaces_ (or _scales_ in the one‐dimensional case of temperatures), and if
