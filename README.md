@@ -958,7 +958,7 @@ somewhat‐prioritized order:
 <br />
 
 <img
- alt='<photo of an elephant in the room>'
+ alt='&lt;photo of an elephant in the room&gt;'
  src='https://upload.wikimedia.org/wikipedia/commons/3/3b/The_Elephant_in_the_Room_Banksy-Barely_legal-2006.jpg'
  style=
  '
