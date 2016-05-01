@@ -1,0 +1,10 @@
+
+#ifndef MJK_MATH_H
+#define MJK_MATH_H
+
+#include "impl/ident.hpp"
+#include "impl/gcd.hpp"
+#include "impl/power.hpp"
+#include "impl/root.hpp"
+
+#endif

@@ -1,0 +1,15 @@
+
+#ifndef MJK_META_H
+#define MJK_META_H
+
+#include <type_traits>
+
+namespace mjk
+{
+	template<bool Cond>
+	using int_if = std::enable_if_t<Cond,int>;
+}
+
+#include "impl/intseq.hpp"
+
+#endif

@@ -1,0 +1,29 @@
+
+#ifndef MJK_INTEGRAL_CONSTANT_H
+#define MJK_INTEGRAL_CONSTANT_H
+
+#include <cstdint>
+#include <type_traits>
+
+namespace mjk
+{
+	template<typename T, T Value>
+	struct integral_constant
+		: std::integral_constant<T,Value>
+	{};
+
+	template<typename TA, TA VA, typename TB, TB VB>
+	constexpr auto
+	operator&&( integral_constant<TA,VA>, integral_constant<TB,VB> )
+	{ return integral_constant<decltype(VA && VB), VA && VB>{}; }
+
+	template<bool Value> using bool_constant = integral_constant<bool,  Value>;
+	template<char Value> using char_constant = integral_constant<char,  Value>;
+	template<decltype(sizeof 0) Value> using size_constant   = integral_constant<decltype(Value), Value>;
+	template<std::intmax_t      Value> using intmax_constant = integral_constant<std::intmax_t,   Value>;
+
+	using true_type  = bool_constant<true>;
+	using false_type = bool_constant<false>;
+}
+
+#endif

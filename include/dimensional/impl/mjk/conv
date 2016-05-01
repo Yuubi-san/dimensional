@@ -1,0 +1,37 @@
+
+#ifndef MJK_CONV_H
+#define MJK_CONV_H
+
+#include <type_traits>
+#include <utility>
+
+namespace mjk
+{
+	// to be user-specialized
+	template<typename From, typename To>
+	struct conversion;
+	/* example:
+		template<typename Char>
+		struct conversion< std::basic_string<Char>, std::vector<Char> >
+		{
+			auto operator()( const std::basic_string<Char> &s ) const
+			{ return std::vector<Char>{ begin(s), end(s) }; }
+		};
+		template<typename Char>
+		struct conversion< std::vector<Char>, std::basic_string<Char> >
+		{
+			auto operator()( const std::vector<Char> &s ) const
+			{ return std::basic_string<Char>{ begin(s), end(s) }; }
+		};
+	*/
+
+	// friendly wrapper
+	template<typename To, typename From>
+	inline constexpr To to( From &&from )
+	{	
+		return conversion<std::decay_t<From>,To>{}(
+			std::forward<From>(from) );
+	}
+}
+
+#endif

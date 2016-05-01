@@ -1,0 +1,177 @@
+
+#ifndef MJK_FUN_H
+#define MJK_FUN_H
+
+#include "integral_constant"
+#include <cstddef>
+#include <tuple>
+#include <type_traits>
+#include <utility>
+
+namespace mjk
+{
+	// n-ary logical and arithmetical addition and multiplication
+
+	constexpr bool any() { return false; }
+	template<typename... Bool>
+	constexpr bool any( bool first, Bool... other )
+	{
+		return first || any( other... );
+	}
+
+	constexpr bool all( bool the_only ) { return the_only; }
+	template<typename... Bool>
+	constexpr bool all( bool first, Bool... other )
+	{
+		return first && all( other... );
+	}
+
+	template<typename T>
+	constexpr T sum() { return T{}; }
+	template<typename T>
+	constexpr T sum( const T &the_only ) { return the_only; }
+	template<typename T, typename... Types>
+	constexpr auto sum( const T &first, const Types &... other )
+	{
+		return first + sum( other... );
+	}
+
+	template<typename T>
+	constexpr T product( const T &the_only ) { return the_only; }
+	template<typename T, typename... Types>
+	constexpr auto product( const T &first, const Types &... other )
+	{
+		return first * product( other... );
+	}
+
+
+	// generalization
+
+	template<typename F, typename T>
+	constexpr decltype(auto)  left_fold( F &&/*op*/, T &&only ) { return std::forward<T>(only); }
+	template<typename F, typename T>
+	constexpr decltype(auto) right_fold( F &&/*op*/, T &&only ) { return std::forward<T>(only); }
+	template<typename F, typename T, typename U, typename... Types>
+	constexpr decltype(auto)  left_fold( F &&op, T &&first, U &&second, Types &&... other )
+	{
+		return left_fold( op, op(std::forward<T>(first), std::forward<U>(second)), std::forward<Types>(other)... );
+	}
+	template<typename F, typename T, typename U, typename... Types>
+	constexpr decltype(auto) right_fold( F &&op, T &&first, U &&second, Types &&... other )
+	{
+		return op( std::forward<T>(first), right_fold(op, std::forward<U>(second), std::forward<Types>(other)...) );
+	}
+
+	// uncpecified order (for commutative operations)
+	// may be vectorized, parallelized, etc.
+	template<typename F, typename... Types>
+	constexpr decltype(auto) fold( F &&op, Types &&... args )
+	{
+		return right_fold( std::forward<F>(op), std::forward<Types>(args)...);
+	}
+
+
+	// o constexpr lambda, where art thou?
+#define mjk_def_named_op( op, name ) \
+	struct { \
+		using is_transparent = void; \
+		template< typename T, typename U > \
+		constexpr decltype(auto) \
+		operator()( T &&l, U &&r ) const \
+		{ return std::forward<T>(l) op std::forward<U>(r); } \
+	} constexpr name{}
+
+	mjk_def_named_op( +,  plus  );
+	mjk_def_named_op( -,  minus );
+	mjk_def_named_op( <,  less  );
+	mjk_def_named_op( ==, equal_to );
+	mjk_def_named_op( <<, bit_lshift );
+#undef mjk_def_named_op
+
+#if 0
+	// old-style function objects
+	template<typename T = void>
+	struct bit_lshift
+	{
+		using result_type = T;
+		using first_argument_type = T;
+		using second_argument_type = T;
+
+		constexpr T
+		operator()( const T &l, const T &r ) const
+		{
+			return l << r;
+		}
+	};
+
+	template<>
+	struct bit_lshift<void>
+	{
+		using is_transparent = void;
+
+		template< typename T, typename U >
+		constexpr decltype(auto)
+		operator()( T &&l, U &&r ) const
+		{
+			return std::forward<T>(l) << std::forward<U>(r);
+		}
+	};
+#endif
+
+
+	// maybe 'conditional' is a better name for this
+	template<typename Boolable, typename T, typename U>
+	inline constexpr decltype(auto)
+	ternary( const Boolable &cond, T &&a, U &&b )
+	{
+		return cond ? std::forward<T>(a) : std::forward<U>(b);
+	}
+	template<typename T, typename U>
+	inline constexpr decltype(auto)
+	ternary( true_type, T &&a, U && )
+	{
+		return std::forward<T>(a);
+	}
+	template<typename T, typename U>
+	inline constexpr decltype(auto)
+	ternary( false_type, T &&, U &&b )
+	{
+		return std::forward<U>(b);
+	}
+
+
+	namespace impl
+	{
+		template<std::size_t N, std::size_t... Indices>
+		struct unpack_tuple
+		{
+			template<typename F, typename T>
+			inline static constexpr
+			void call( F &&f, T &&t )
+			{
+				return unpack_tuple<N-1,N-1,Indices...>::call( std::forward<F>(f), std::forward<T>(t) );
+			}
+		};
+		template<std::size_t... Indices>
+		struct unpack_tuple<0,Indices...>
+		{
+			template<typename F, typename T>
+			inline static constexpr
+			void call( F &&f, T &&t )
+			{
+				return std::forward<F>(f)( std::get<Indices>(std::forward<T>(t))... );
+			}
+		};
+	}
+
+	// calls f with all members of t as arguments
+	template<typename Callable, typename Tuple>
+	inline constexpr
+	void unpack_tuple( Callable &&f, Tuple &&t )
+	{
+		constexpr auto N = std::tuple_size< std::remove_reference_t<Tuple> >::value;
+		return impl::unpack_tuple<N>::call( std::forward<Callable>(f), std::forward<Tuple>(t) );
+	}
+}
+
+#endif
