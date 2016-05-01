@@ -8,9 +8,9 @@ A (proof‐of‐concept) toolkit for dimensional analysis in modern C++.
 Intro
 -----
 
-If that description made you go <q style='font-style:italic'>Dimensional
+If that description made you go <i><q>Dimensional
 analysis? But I’m not launching any probes to orbit distant planets any time
-this life</q>, then good! That means the following code won’t offend your
+this life</q></i>, then good! That means the following code won’t offend your
 sense of mathematical elegance (too much). So here, have a mashup of some
 mundane programming we all do on a day‐to‐day basis…
 
@@ -153,7 +153,7 @@ I won’t spell the actual types of those. Not because they’re particularly sc
 but mostly because I’d like to keep users away from spelling them, too. Consider
 types an implementation detail, at least until the library has stabilized.
 
-<q style='font-style:italic'>Then how do I…</q>
+<i><q>Then how do I…</q></i>
 
 	constexpr auto length = dimension< struct length_tag >{};
 	constexpr auto parsec = unit_of( length ),  pc = parsec;
@@ -164,7 +164,7 @@ types an implementation detail, at least until the library has stabilized.
 		return maybe;  // TODO
 	}
 
-<q style='font-style:italic'>Oh.</q>
+<i><q>Oh.</q></i>
 
 That’s the short answer, but let us follow that train of thought a bit further.
 Continued:
@@ -334,8 +334,8 @@ Whoops.
 It gets worse. The value then gets to meet with the bit unit, which’d be okay by
 itself, but not when the next thing that happens to the resulting quantity is
 division by the second unit (no pun intended). Because that must not be allowed.
-<q style='font-style:italic'>Dividing/multiplying quantities by units for
-syntax sugar like in `5*cm/s`? Why not?</q> Because that’s effectively a
+<i><q>Dividing/multiplying quantities by units for
+syntax sugar like in `5*cm/s`? Why not?</q></i> Because that’s effectively a
 _reinterpretation_ of the value of one unit as a value of another. _Unit
 [punning][]_, if you will. An unintended pun indeed.
 
@@ -461,11 +461,8 @@ like fps is often simply hertz–the inverse of second.
 		auto imperial_blots = 300.L*dpi;
 		return imperial_blots/fallacy;
 
-Quick! What’s the return type (conceptually)? Select to verify yourself: <span
-style='color: transparent; border: 1px solid #eee;'><span
-style='font-family:monospace'>long double</span>
-dots per pixel, which is a unit of inverse
-<span style='font-family:monospace'>virtual_length</span></span>.
+Quick! What’s the return type (conceptually)? Squint to verify yourself: <s>long
+double dots per pixel, which is a unit of inverse virtual length</s>.
 
 Okay, done with the Frankenstein’s monster, now let’s try something more _sane_.
 
