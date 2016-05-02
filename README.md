@@ -228,7 +228,7 @@ either (1) stick with the particular quantity and unit classes from the library
 of our choosing, (2) publicly inherit their own classes from said library’s
 classes, or (3) define conversions from the classes of their choosing and enjoy
 completely redundant explicit casting everywhere. In all this “deduction hell”,
-adding to the mix one particular representation of a dimension doesn’t seem like
+adding to the mix the dependency on particular dimension representations doesn’t seem like
 a major villain. Still, what do?
 
 To start with, let us go back to the basics, eliminating the intricate deduction
@@ -537,7 +537,7 @@ the perceived intensity of the color will be more pronounced in the former case.
 And we’re making an assumption that we’re desaturating _for humans to see_. What
 about cats? Dogs? Mantis shrimp? Forget meatbags, what if we’re simulating b/w
 photographic film? For science. Then the whole story of viewing conditions goes
-out the window, and we need the response curve of a particular film. So yeah,
+out the window, and we need the response curve of particular film. So yeah,
 you’re not getting away with (r+g+b)/3 even if r, g and b are raw linear
 non‐weighted watts. Fortunately, there are standards and guidelines, so it’s not
 all that hopeless.
@@ -985,11 +985,11 @@ Okay, let’s finally address it. What about…
 ---------------
 
 Not much to say about it, really, given it was practically _yesterday_ (as of
-this writing) that I condescended to familiarize myself with it. However, what
-fleeting acquaintance I had with the library, was enough to conclude for myself
+this writing) that I condescended to familiarize myself with this library.
+However, what fleeting acquaintance I had with it, was enough to conclude for myself
 that our paths are those of little codirectionality. Reading the docs, my eyes
 glazed over from the amount of boilerplate and syntactic noise, and I haven’t
-even got past the basics. The verbosity is in part due to having been designed
+even got past the basics. The verbosity is, in part, due to having been designed
 and written for C++98, and thus unavoidable, but it’s amplified by a number of
 seemingly unnecessary concepts (one of them being _unit systems_), which do not
 only clutterify very simple things, but—overall—impose too much structure, in my
