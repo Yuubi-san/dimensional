@@ -216,8 +216,8 @@ represented differently from the <span style='font-family:serif'>{length¹,
 time⁻², mass¹}</span> set, even though it’s the same set. (BTW,
 <span style='font-family:serif'>dim²</span> and
 <span style='font-family:serif'>dim<sup>⁻⁴⁄₋₂</sup></span> _do_
-have the same type thanks to guaranteed ratio reduction, as do `254_/10'000_*m`
-and `127_/5'000_*m` units.)
+have the same type thanks to guaranteed ratio reduction, as do `254_/​10'000_*m`
+and `127_/​5'000_*m` units.)
 
 To a traditionally‐minded C++ programmer this may seem like a very serious
 issue, but this is not necessarily the case, even in absence of CTTI niceties.
@@ -868,7 +868,7 @@ somewhat‐prioritized order:
 
 	* there’s `<`,  but no `>`,
 	* there’s `+=`, but no `*=`,
-	* there’s sqrt, but no cbrt.
+	* there’s `sqrt`, but no `cbrt`.
 
 	Et cetera.
 
@@ -946,8 +946,11 @@ somewhat‐prioritized order:
 	Will probably require an approach similar to that for foreign type
 	interoperability in order to have `cout << 1.5*W*15s` print `22.5 J`.
 	At first, a simple value‐scale‐dimension triplet could be enough, like
-	`22.5 [1/1]si.mass^2*si.length^2*si.time^-2`. This is supposed to be highly
-	machine‐readable, so input validation comes cheaply.
+
+	> `22.5 [1/1]si.mass^2*si.length^2*si.time^-2`
+
+	This is supposed to be highly machine‐readable, so input validation comes
+	cheaply.
 
 	Accepting any scale and converting to the scale required seems to be of too
 	low a bang‐to‐buck ratio to consider right now. On the other side of effort
