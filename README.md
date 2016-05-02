@@ -80,13 +80,13 @@ defined: that `1_ << 10_` gives `kibi` the type `constant<​1024>` and, e.g.,
 `decltype(​cbrt(27_/​1331_))` is exactly `constant<​3, 11>`.
 
 Not to get sidetracked by the awesomenesses of compile‐time rational
-arithmetic–and skipping some boilerplate–let us begin with the actual
+arithmetic—and skipping some boilerplate—let us begin with the actual
 code at hand:
 
 		constexpr auto information = dimension<struct information_tag>{};
 
-This decidedly not‐concise‐enough statement–which may one happy day become
-`make_dimension([]{})` or even `make_dimension()`–simply creates a unique
+This decidedly not‐concise‐enough statement—which may one happy day become
+`make_dimension([]{})` or even `make_dimension()`—simply creates a unique
 **dimension** type and an instance thereof. It’s unique only by virtue of a
 local (incomplete) struct that is used as a tag. If this was at a named
 namespace scope, the struct would also become part of that namespace, making the
@@ -105,8 +105,8 @@ dimensions, and…
 
 		constexpr auto bit   = unit_of(information), b = bit;
 
-…**units**. Which get born out of dimensions and are, again, types stored–and
-manipulated–in the form of their instances. The `T x = :::, y = x;` syntax
+…**units**. Which get born out of dimensions and are, again, types stored—and
+manipulated—in the form of their instances. The `T x = :::, y = x;` syntax
 should make it self‐evident that `b` here is simply another name for `bit`,
 carrying the same type and, thus, representing the same unit. But what would
 happen if we’d multiplied it by a constant?
@@ -123,8 +123,8 @@ _their ratio_ that matters. Thus, we could have just as well chosen the octet as
 our “fundamental” unit of information, and derived the bit from it using the
 factor `1_/8_`. By the way, `octet/8_` wouldn’t pass, and that’s by current
 design: we don’t say “octet over eight”, but “one eighth of octet”. Immediately
-following the primary definition is an ambiguous–but good enough for this
-context–`byte` alias, along with its symbol: `B`.
+following the primary definition is an ambiguous—but good enough for this
+context—`byte` alias, along with its symbol: `B`.
 
 		constexpr auto kibi = 1_ << 10_, Ki = kibi;
 		constexpr auto mebi = 1_ << 20_, Mi = mebi;
@@ -133,7 +133,7 @@ context–`byte` alias, along with its symbol: `B`.
 		using si::s;
 
 Defining a couple of named constants to be used as prefixes and importing some
-of the already defined SI ones–for kilo and mega–plus the symbol for the unit of
+of the already defined SI ones—for kilo and mega—plus the symbol for the unit of
 time.
 
 		const auto cluster_size  = 4u*(Ki*B);
@@ -146,7 +146,7 @@ type and as such don’t qualify as constants by our standards. Naturally,
 multiplying by one of them won’t change the unit’s scale, unlike `Ki*B`, which
 produces “kibibyte” unit out of “byte” one. So, enough suspense, what’s the
 result? It’s the thing we’re all gathered here for and will be interacting with
-the most: **quantity**–a “unitized” value for _unit‐safe programming_.
+the most: **quantity**—a “unitized” value for _unit‐safe programming_.
 `cluster_size` has value 4 of type `unsigned` and has unit “kibibyte” aka “eight
 kibibit” (which consists of dimension “information” and scale 8192). And no,
 I won’t spell the actual types of those. Not because they’re particularly scary,
@@ -260,7 +260,7 @@ even much lengthier, but is this how it really should look? It’s ugly enough
 even without actual `std::​enable_if` and with only one argument, and I didn’t
 even touch upon mutual exclusion here yet, so these two, if both present, will
 make a call like `jump_fwd(1*pc)` ambiguous since no one told the compiler that
-the second overload is–you guessed it–less specialized. Now imagine you had
+the second overload is—you guessed it—less specialized. Now imagine you had
 several dozens of operators to define (they don’t like extra arguments very
 much, default or not, so the SFINAE machinery is slipping into the trailing
 return type, where you have to either _spell the actual return type_ or spill
@@ -326,7 +326,7 @@ Moving on and away from this uncomfortable place.
 Here we define a handy alias for megabits per second, so as not to type
 `(M*b/s)` everywhere. The parens are often necessary due to left‐associativity
 of multiplication: the `10.24*M*b/s` would be parsed as `((10.24*M)*b)/s`, and
-that opens a whole ’nuther can of worms–in the spirit of the division woes
+that opens a whole ’nuther can of worms—in the spirit of the division woes
 before. Just like `std::​integral_constant`, our constants have implicit
 conversion to integers, which C++ happily pounces on, producing `10240000.0`.
 Whoops.
@@ -350,7 +350,7 @@ bugged me, too. Confer:
 The first line is obviously begging for trouble. There _must_ be interaction
 with non‐unit‐safe code at _some_ points, and it’s critical to make those light
 up like christmas trees as well as scream “stand back, type juggling in process”
-at the reader _and_ `grep`–much like `const_cast` does for non‐const‐correct
+at the reader _and_ `grep`—much like `const_cast` does for non‐const‐correct
 code. The second line is perfectly greppable and couldn’t(?) be more safe, in
 addition to cutting short the tug of war between operators by the function‐call
 comma’s superiorly low precedence.
@@ -414,7 +414,7 @@ guess. Anyway, subtracting 240 kbps from 10.24 Mbps effectively subtracts
 equivalent to `throughput = throughput - 240*(k*bps)`. Subtraction (and other
 “linear” operations, such as addition and comparison) converts both sides to a
 unit of some scale that is the greatest common divisor of the two scales (which
-in this simple case happens to be one of them–kilo–because 1000 evenly divides
+in this simple case happens to be one of them—kilo—because 1000 evenly divides
 1 000 000). That way the conversion coefficients are always integers greater
 than or equal to one. This is to satisfy another design constraint: never invent
 runtime divisions in arithmetic operations unless that’s absolutely necessary.
@@ -455,7 +455,7 @@ interpreted as newton or as gram per square second?
 
 Although one could define a separate dimension for the dots, I just didn’t feel
 like it for no specific reason, so dpi here is simply the inverse of inch, just
-like fps is often simply hertz–the inverse of second.
+like fps is often simply hertz—the inverse of second.
 
 		auto fallacy = 96.*ppi;
 		auto imperial_blots = 300.L*dpi;
@@ -635,7 +635,7 @@ at least in _some_ from, and even though it can be reduced to a minimum, like in
 `sleep_for(​dur( 2*sqrt(​2*h/g0) ))`, still, the decision to forgo concept‐based
 signatures for standard duration‐taking functions to favor one single `duration`
 template was a considerable loss for the generality of standard library,
-which–outside STL–is already modest at best (ah, the omnipresence of
+which—outside STL—is already modest at best (ah, the omnipresence of
 `std::​string`…). Welp, at least we are spared from obviating the cast by
 turning deduction off, as in
 `std::​this_thread::​sleep_for<​long long, std::nano>( 2*sqrt(​2*h/g0) )`.
@@ -716,10 +716,10 @@ order:
 
 	Notice the absence of a “unit system” concept above. For fear of collisions
 	between completely unrelated units, which nonetheless share a common
-	dimension–such as _length_–I considered introducing “universe”–practically,
-	unit system–tags. Trying to fit them onto quantities and quickly failing, I
-	started mentally pushing them up the abstraction tree–into units, then
-	dimensions–until realizing one simple fact: the dimension’s namespace
+	dimension—such as _length_—I considered introducing “universe”—practically,
+	unit system—tags. Trying to fit them onto quantities and quickly failing, I
+	started mentally pushing them up the abstraction tree—into units, then
+	dimensions—until realizing one simple fact: the dimension’s namespace
 	**_is_** the tag, and there really is no need to use the same tag for
 	conceptually similar, but not necessarily identical things. If I want to
 	work with a unit of length from some fantasy world that has _unknowable_
@@ -728,7 +728,7 @@ order:
 
 		constexpr auto quux = unit_of(si::length);
 
-	“Isn’t SI unit of length the metre?”–immediately comes to mind. Instead it
+	“Isn’t SI unit of length the metre?”—immediately comes to mind. Instead it
 	should look more like `quux = unit_of(uvuvuwu::​length)`. Problem solved,
 	and the solution feels natural. In addition, if I fancy to do complicated
 	computations mixing in real‐world units, I don’t need to do anything
@@ -806,7 +806,7 @@ order:
 
 11. Modular
 
-	From the user perspective–still not very much. At the very least, need to
+	From the user perspective—still not very much. At the very least, need to
 	cut the header into several pieces. Those would still have multi‐tier
 	relationship if further decoupling of dimensions, units and quantities is
 	not made by leveraging concepts.
@@ -852,7 +852,7 @@ N<sub><small>DT</small></sub>×N<sub><small>P</small></sub>×N<sub><small>U</sma
 
 But we live in the world where STL is not just a thing, it’s _thriving_. In the
 world where N<sub><small>DT</small></sub>+N<sub><small>U</small></sub> is
-possible _and_ is the default way–the Tao of C++. Hence the operator syntax,
+possible _and_ is the default way—the Tao of C++. Hence the operator syntax,
 with literals responsible strictly for the datatype (`3.f*m + 14LL*s`).
 
 
@@ -873,7 +873,7 @@ somewhat‐prioritized order:
 	Et cetera.
 
 2. Allow for dimensions and scales whose identity/value is not part of their
-   type–“dynamicalize” the library. Examples follow.
+   type—“dynamicalize” the library. Examples follow.
 
 	#### Dynamic scale
 
@@ -895,7 +895,7 @@ somewhat‐prioritized order:
 		:::
 		widget.SetSize( (int2{210,297}*mm).to(px) );
 
-	Since the unit of `sz` is stateful (and–suppose–doesn’t have any meaningful
+	Since the unit of `sz` is stateful (and—suppose—doesn’t have any meaningful
 	state a default constructor could put it into, if defined), we can’t perform
 	the conversion to it without a unit instance, hence the explicit `.to(px)`.
 
@@ -992,7 +992,7 @@ glazed over from the amount of boilerplate and syntactic noise, and I haven’t
 even got past the basics. The verbosity is in part due to having been designed
 and written for C++98, and thus unavoidable, but it’s amplified by a number of
 seemingly unnecessary concepts (one of them being _unit systems_), which do not
-only clutterify very simple things, but–overall–impose too much structure, in my
+only clutterify very simple things, but—overall—impose too much structure, in my
 view, making the library very rigid. Will my project be able to succeed without
 much of this structure? Well, I wouldn’t be able to tell without trying anyway.
 
@@ -1035,7 +1035,7 @@ Contributing
 The best way to help right now is to:
 
 * (ab)use the hell out of the library,
-* [file issues][issues] with bugs, suggestions and questions–on design,
+* [file issues][issues] with bugs, suggestions and questions—on design,
   implementation _and_ documentation.
 
 And not necessarily in that order.
@@ -1059,12 +1059,12 @@ static and dynamic, is all about.
 
 For better or worse, I’m still inclined not to scrap what habitual meta‐code
 I’ve hacked together as a back‐end for this project. Partly because turning
-this mess into something elegant–or even beautiful–is _interesting_, and even
+this mess into something elegant—or even beautiful—is _interesting_, and even
 enlightening.
 
 Another thank‐you goes to [Howard Hinnant][] and the rest of `std::​chrono`
 authors for bringing this well‐thought‐out facility to the masses, thus
-allowing–among many things–to draw inspiration from it. Even without properly
+allowing—among many things—to draw inspiration from it. Even without properly
 studying its design until recently (and inventing many a wheel as a
 consequence), just the idea and implementation of ratio types already gave
 me a solid foundation to work from. The `.count()` syntax is not incidental
