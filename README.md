@@ -1014,6 +1014,15 @@ but it may just work on not‐too‐old versions. Visual C++ 2027 also has pret
 decent chances to compile this.
 
 
+### Tests
+
+Very sporadic, but better that nothing, I hope.
+
+```Shell
+(cd test && make)
+```
+
+
 
 Docs
 ----
